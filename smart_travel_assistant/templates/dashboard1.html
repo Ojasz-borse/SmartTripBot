@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Organizer</title>
+    <link rel="stylesheet" href="../static/style1.css">
+    <style>
+        /* Reset basic styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Background settings */
+        body {
+            background: url('../static/passport.jpg') no-repeat center center/cover;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Light Sky Blue Navigation Bar */
+        nav {
+            background-color: #87CEEB; /* Light Sky Blue */
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Logo Styling */
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        /* Navigation Menu */
+        .menu {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .menu li {
+            position: relative;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: bold;
+            padding: 10px;
+            transition: 0.3s ease-in-out;
+        }
+
+        .menu a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* Container */
+        .container {
+            width: 80%;
+            margin: 40px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(135, 206, 235, 0.3);
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #87CEEB;
+        }
+
+        th {
+            background-color: #87CEEB;
+            color: #2c3e50;
+        }
+
+        tr:hover {
+            background-color: #f0f8ff;
+        }
+
+        /* Button Styling */
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4px;
+            transition: 0.3s ease-in-out;
+        }
+
+        .btn-primary {
+            background-color: #87CEEB;
+            color: #2c3e50;
+        }
+
+        .btn-danger {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Flash Messages */
+        .flash-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left-color: #87CEEB;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left-color: #ff6b6b;
+        }
+
+        /* Heading */
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #87CEEB;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Document Organizer</div>
+        <ul class="menu">
+            <li><a href="{{ url_for('dashboard1') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('upload') }}">Upload Document</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h2>Your Documents</h2>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if documents %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Document Type</th>
+                        <th>Travel Type</th>
+                        <th>Expiry Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for document in documents %}
+                        <tr>
+                            <td>{{ document.doc_type }}</td>
+                            <td>{{ document.travel_type }}</td>
+                            <td>{{ document.expiry_date.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                <a href="{{ url_for('download_document', doc_id=document.id) }}" class="btn btn-primary">Download</a>
+                                <a href="{{ url_for('delete_document', doc_id=document.id) }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this document?')">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No documents found. <a href="{{ url_for('upload') }}" class="btn btn-primary">Upload a document</a></p>
+        {% endif %}
+    </div>
+</body>
+</html>

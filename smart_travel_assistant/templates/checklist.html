@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packing Checklist</title>
+    
+    <!-- Link to CSS -->
+    <link rel="stylesheet" href="/static/styles.css">
+    
+    <!-- Link to JavaScript -->
+    <script src="/static/script.js" defer></script>
+    
+    <!-- Font Awesome Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+</head>
+<style>
+    /* General Styling */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+    }
+    body {
+        font-family: 'Arial', sans-serif;
+        background: url('/static/checklist1.png') no-repeat center center/cover;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    /* Checklist Container - Increased Size */
+    .container {
+        background: rgba(95, 163, 202, 0.7);  /* Semi-transparent white */
+        padding: 40px;  /* Increased padding */
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        width: 550px;  /* Increased width */
+        max-height: 700px; /* Increased height */
+        overflow-y: auto;  /* Scroll if needed */
+    }
+
+    /* Title */
+    h1 {
+        font-size: 32px; /* Increased font size */
+        color: #333;
+        margin-bottom: 25px;
+    }
+
+    /* Input Box */
+    .input-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    input {
+        flex: 1;
+        padding: 14px; /* Bigger padding */
+        border: 2px solid #4facfe;
+        border-radius: 8px; /* Softer edges */
+        font-size: 20px; /* Increased font size */
+        outline: none;
+    }
+
+    button {
+        padding: 14px 20px; /* Bigger button */
+        border: none;
+        background: linear-gradient(135deg, #4facfe, #00c6fb);
+        color: white;
+        font-size: 20px; /* Increased button text */
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-left: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    button:hover {
+        background: linear-gradient(135deg, #00c6fb, #4facfe);
+    }
+
+    /* Checklist */
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        background: rgba(255, 255, 255, 0.85);
+        padding: 16px; /* Increased padding */
+        margin-bottom: 10px; /* More spacing */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 8px; /* Softer edges */
+        font-size: 20px; /* Increased font size */
+        transition: 0.3s;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    li:hover {
+        background: rgba(255, 255, 255, 1);
+    }
+
+    /* Delete Button */
+    .delete-btn {
+        background: none;
+        border: none;
+        color: red;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    /* Print Button */
+    .print-btn {
+        margin-top: 15px;
+        padding: 14px 20px;
+        border: none;
+        background: linear-gradient(135deg, #ff7eb3, #ff758c);
+        color: white;
+        font-size: 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .print-btn:hover {
+        background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    }
+
+    /* Sidebar */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 80px; /* Collapsed */
+        background: linear-gradient(180deg, #4B9FE1, #7ED5EA);
+        border-top-right-radius: 40px;
+        border-bottom-right-radius: 40px;
+        padding: 15px 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: width 0.4s ease-in-out;
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
+        overflow: hidden;
+    }
+
+    /* Expand sidebar */
+    .sidebar:hover {
+        width: 240px;
+    }
+
+    /* Logo */
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        width: 100%;
+        padding-left: 8px;
+    }
+
+    .logo img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+
+    .logo h1 {
+        font-size: 14px;
+        color: white;
+        white-space: nowrap;
+        visibility: hidden;
+        transition: visibility 0.3s ease-in-out;
+    }
+
+    .sidebar:hover .logo h1 {
+        visibility: visible;
+    }
+
+    /* Navigation */
+    .nav-links {
+        width: 100%;
+    }
+
+    .nav-links a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px;
+        margin: 5px 0;
+        border-radius: 25px;
+        font-size: 12px;
+        text-decoration: none;
+        color: white;
+        transition: all 0.3s ease;
+        width: 100%;
+        padding-left: 8px;
+    }
+
+    .nav-links a i {
+        font-size: 18px;
+        width: 25px;
+        text-align: center;
+    }
+
+    .nav-links p {
+        font-size: 14px;
+        white-space: nowrap;
+        visibility: hidden;
+        transition: visibility 0.3s ease-in-out;
+    }
+
+    .sidebar:hover .nav-links p {
+        visibility: visible;
+    }
+
+    /* Logout */
+    .logout {
+        margin-top: auto;
+        padding-bottom: 10px;
+    }
+
+    .logout a {
+        color: white;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        padding-left: 8px;
+        transition: 0.3s;
+    }
+
+    .logout a p {
+        visibility: hidden;
+    }
+
+    .sidebar:hover .logout a p {
+        visibility: visible;
+    }
+
+    /* Checkbox styling */
+    .checkbox-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .checkbox-wrapper input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+
+    .completed {
+        text-decoration: line-through;
+        color: #888;
+    }
+</style>
+<body>
+    <div class="container">
+        <h1>Packing Checklist <i class="fa-solid fa-suitcase-rolling"></i></h1>
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="/static/logo.png" alt="Logo">
+                <h1>Smart-Travel Bot</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="/dashboard"><i class="fas fa-home"></i><p>Dashboard</p></a>
+                <a href="/trips"><i class="fas fa-plane"></i><p>My Trips</p></a>
+                <a href="/budget"><i class="fas fa-wallet"></i><p>Budget AI</p></a>
+                <a href="/check"><i class="fas fa-check-circle"></i><p>Checklist</p></a>
+                <a href="/upload"><i class="fas fa-file-upload"></i><p>Document Organizer</p></a>
+                <a href="/currencycon"><i class="fas fa-coins"></i><p>Currency Converter</p></a>
+                <a href="/emer"><i class="fas fa-ambulance"></i><p>Emergency Services</p></a>
+                <a href="/translate"><i class="fas fa-language"></i><p>Language & Translation</p></a>
+                <a href="#"><i class="fas fa-bell"></i><p>Smart Reminders</p></a>
+            </nav>
+            <div class="logout">
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i><p>Logout</p></a>
+            </div>
+        </aside>
+
+        <!-- Form to Add Item -->
+        <form id="add-item-form" class="input-group">
+            <input type="text" id="item-input" placeholder="Enter item" required>
+            <button type="submit"><i class="fa-solid fa-plus"></i> Add</button>
+        </form>
+
+        <!-- Checklist Items -->
+        <ul id="checklist">
+            {% for item in items %}
+                <li>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" {% if item.completed %}checked{% endif %} 
+                               onchange="toggleItem({{ item.id }})">
+                        <span {% if item.completed %}class="completed"{% endif %}>{{ item.item }}</span>
+                    </div>
+                    <a href="/delete/{{ item.id }}" class="delete-btn">&#10060;</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Print Button -->
+        <button onclick="printChecklist()" class="print-btn"><i class="fa-solid fa-print"></i> Print Checklist</button>
+    </div>
+
+    <script>
+        // Function to print the checklist properly
+        window.printChecklist = function () {
+            let checklistContent = document.getElementById("checklist").innerHTML;
+
+            // Create a new print window
+            let printWindow = window.open('', '', 'height=600, width=600');
+            
+            // Write the HTML content for printing
+            printWindow.document.write('<html><head><title>Print Checklist</title>');
+            printWindow.document.write('<style>');
+            printWindow.document.write('body { font-family: Arial, sans-serif; text-align: center; }');
+            printWindow.document.write('ul { list-style-type: none; padding: 0; }');
+            printWindow.document.write('li { font-size: 18px; padding: 10px; border-bottom: 1px solid #ccc; }');
+            printWindow.document.write('</style>');
+            printWindow.document.write('</head><body>');
+
+            printWindow.document.write('<h2>Packing Checklist</h2>');
+            printWindow.document.write('<ul>' + checklistContent + '</ul>');
+
+            printWindow.document.write('</body></html>');
+            
+            // Close the document stream and trigger print
+            printWindow.document.close();
+            printWindow.print();
+        };
+
+        // Handle form submission
+        document.getElementById('add-item-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const itemInput = document.getElementById('item-input');
+            const itemText = itemInput.value.trim();
+
+            if (itemText) {
+                const formData = new FormData();
+                formData.append('item', itemText);
+
+                fetch('/add_item', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Create new list item
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" onchange="toggleItem(${data.item.id})">
+                                <span>${data.item.text}</span>
+                            </div>
+                            <a href="/delete/${data.item.id}" class="delete-btn">&#10060;</a>
+                        `;
+                        document.getElementById('checklist').insertBefore(li, document.getElementById('checklist').firstChild);
+                        itemInput.value = '';
+                    } else {
+                        alert('Error adding item: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error adding item');
+                });
+            }
+        });
+
+        // Function to toggle item completion
+        function toggleItem(itemId) {
+            fetch(`/toggle/${itemId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const checkbox = event.target;
+                        const span = checkbox.nextElementSibling;
+                        if (data.completed) {
+                            span.classList.add('completed');
+                        } else {
+                            span.classList.remove('completed');
+                        }
+                    } else {
+                        alert('Error toggling item: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error toggling item');
+                });
+        }
+    </script>
+</body>
+</html>

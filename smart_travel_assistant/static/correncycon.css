@@ -1,0 +1,74 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    background-image: url('image copy.png'); /* Ensure the file name and path are correct */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.converter-container {
+    max-width: 450px;
+    margin: 50px auto;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+}
+
+.converter-container h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+}
+
+select, input, button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #2456b8;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #5a4248;
+}
+
+#result {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #b50808;
+}
+
+.currency-select {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.currency-select img {
+    width: 30px;
+    height: 20px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}

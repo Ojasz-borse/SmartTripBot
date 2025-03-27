@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Trip</title>
+    <style>
+        .image-upload {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .image-upload input[type="file"] {
+            display: none;
+        }
+        .image-upload label {
+            cursor: pointer;
+            border: 2px solid #ccc;
+            padding: 5px 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        .image-upload label:hover {
+            background-color: #e0e0e0;
+        }
+        .image-upload img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add a New Trip</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <div>
+            <label for="name">Trip Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+
+        <div>
+            <label for="cover_image">Cover Image:</label>
+            <input type="file" id="cover_image" name="cover_image" accept="image/*" required>
+        </div>
+
+        <div>
+            <label for="start_date">Start Date:</label>
+            <input type="date" id="start_date" name="start_date" required>
+        </div>
+
+        <div>
+            <label for="end_date">End Date:</label>
+            <input type="date" id="end_date" name="end_date" required>
+        </div>
+
+        <div class="image-upload">
+            <label for="images">+ Upload Images</label>
+            <input type="file" id="images" name="images" accept="image/*" multiple>
+        </div>
+
+        <div>
+            <button type="submit">Add Trip</button>
+        </div>
+    </form>
+</body>
+</html>

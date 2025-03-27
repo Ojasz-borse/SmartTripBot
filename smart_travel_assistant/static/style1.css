@@ -1,0 +1,175 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-size: cover;
+    background-image: url('https://i.pinimg.com/736x/94/7a/c2/947ac202e6c04f0baa696848ba98b86d.jpg');
+}
+
+nav {
+    background-color: #1d1b24;
+    padding: 10px;
+    text-align: center;
+    color: white;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.container {
+    width: 70%;
+    margin: auto;
+    padding: 30px;
+    background: white;
+    margin-top: 30px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 20px;
+}
+
+th {
+    background-color: #4c95af;
+    color: white;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+.expiring {
+    background-color: #ffdddd;
+    color: red;
+    font-weight: bold;
+}
+
+.delete-btn {
+    color: red;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.delete-btn:hover {
+    text-decoration: underline;
+}
+:root {
+    --color-highlight: rgba(0, 0, 0, 0.25);
+}.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 80px; /* Initial collapsed width */
+    background: #522ad3;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.4s ease;
+}
+
+.sidebar:hover {
+    width: 250px; /* Expanded width */
+}
+
+/* Sidebar Header */
+.header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: var(--color-highlight);
+    gap: 10px;
+}
+
+.header img {
+    height: 50px;
+    transform: rotate(180deg);
+    margin-left: 8px;
+}
+
+.header h1 {
+    opacity: 0;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar:hover .header h1 {
+    opacity: 1;
+}
+
+/* Sidebar Navigation */
+.sidebar nav {
+    padding: 10px 8px;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 44px;
+    width: 100%;
+    padding: 0 16px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 400;
+    opacity: 0.75;
+    text-decoration: none;
+    color: white;
+    transition: background 0.3s, opacity 0.3s;
+}
+
+.sidebar a:hover {
+    background: var(--color-highlight);
+    opacity: 1;
+}
+
+/* Sidebar Icons */
+.sidebar a i {
+    font-size: 20px;
+    width: 24px;
+    text-align: center;
+}
+
+/* Sidebar Text Animation */
+.sidebar a p {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.sidebar:hover a p {
+    opacity: 1;
+}
