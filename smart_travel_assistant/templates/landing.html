@@ -15,6 +15,34 @@
     font-family: 'Poppins', sans-serif;
 }
 
+@media (max-width: 768px) {
+    .container {
+        width: 90%; /* Adjust width dynamically */
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2em; /* Reduce font size */
+    }
+
+    .features {
+        grid-template-columns: 1fr; /* Single-column layout */
+    }
+
+    .feature {
+        padding: 20px;
+    }
+
+    .cta-section {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .cta-button {
+        width: 100%; /* Make buttons full width */
+        max-width: 300px;
+    }
+}
 
 :root {
     --primary-color: #6bb5ff;
