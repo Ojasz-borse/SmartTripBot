@@ -124,6 +124,7 @@ def init_db():
 # Initialize database
 init_db()
 
+
 # Routes
 @app.route('/dashboard1')
 def dashboard1():
@@ -183,6 +184,15 @@ def dashboard():
 @app.route('/index')
 def index():
     return render_template('index.html')
+
+@app.route('/')
+def landing():
+    return render_template('landing.html')
+
+@app.route('/features')
+def features():
+    return render_template('features.html')
+
 
 @app.route('/currencycon')
 def currencycon():
@@ -356,24 +366,25 @@ def add_item():
     
     try:
         item_text = request.form.get('item')
-        if item_text:
-            new_item = ChecklistItem(
-                user_id=session['user_id'],
-                item=item_text,
-                completed=False
-            )
-            db.session.add(new_item)
-            db.session.commit()
+        if not item_text:
+            return jsonify({'error': 'No item text provided'}), 400
             
-            return jsonify({
-                'success': True,
-                'item': {
-                    'id': new_item.id,
-                    'text': new_item.item,
-                    'completed': new_item.completed
-                }
-            })
-        return jsonify({'error': 'No item text provided'}), 400
+        new_item = ChecklistItem(
+            user_id=session['user_id'],
+            item=item_text,
+            completed=False
+        )
+        db.session.add(new_item)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'item': {
+                'id': new_item.id,
+                'text': new_item.item,
+                'completed': new_item.completed
+            }
+        })
     except Exception as e:
         db.session.rollback()
         print(f"Error adding checklist item: {str(e)}")
@@ -915,4 +926,4 @@ def download_document(doc_id):
     return redirect(url_for('dashboard1'))
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5003)  # Change 5001 to any desired port
+    app.run(host='0.0.0.0', port=8000, debug=False)
