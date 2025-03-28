@@ -20,7 +20,8 @@ from flask_migrate import Migrate
 from sqlalchemy import Column, Integer, String, Date
 from datetime import datetime
 from translatepy import Translator
-from models import db, Document
+from models import db, User, Trip, ChecklistItem, Document, Translation
+from werkzeug.security import generate_password_hash
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -44,34 +45,6 @@ co = cohere.Client('Y4hXn0B2VIGGW3i52mRoO7EN1em88kKNwnz2lBwd')
 # Create upload folder if it doesn't exist
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
-
-# Define models
-class ChecklistItem(db.Model):
-    __tablename__ = 'checklist_items'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
-    item = db.Column(db.String(200), nullable=False)
-    completed = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return f'<ChecklistItem {self.item}>'
-
-class Trip(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    cover_image = db.Column(db.String(200), nullable=True)
-    start_date = db.Column(db.Date, nullable=False)
-    end_date = db.Column(db.Date, nullable=False)
-    image_filenames = db.Column(db.Text, nullable=False)
-
-    def __repr__(self):
-        return f'<Trip {self.name}>'
-
-class Image(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    filename = db.Column(db.String(150), nullable=False)
 
 # Create database tables
 with app.app_context():
@@ -193,6 +166,126 @@ def landing():
 def features():
     return render_template('features.html')
 
+# Route to display all trips (only for logged-in user)
+@app.route('/trips')
+def show_trips():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    user_id = session['user_id']
+    trips = Trip.query.filter_by(user_id=user_id).all()
+    return render_template('trips.html', trips=trips)
+
+# Route to display a single trip (only for the owner)
+@app.route('/trips/<int:trip_id>')
+def trip_detail(trip_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    trip = Trip.query.filter_by(id=trip_id, user_id=session['user_id']).first_or_404()
+    return render_template('trip_detail.html', trip=trip)
+
+# Route to edit/save trip details (ownership check enforced)
+@app.route('/save_trip/<int:trip_id>', methods=['POST'])
+def save_trip(trip_id):
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Please log in first'}), 401
+
+    trip = Trip.query.filter_by(id=trip_id, user_id=session['user_id']).first_or_404()
+
+    # Fetch form data
+    name = request.form.get('name')
+    description = request.form.get('description')
+    start_date = request.form.get('start_date')
+    end_date = request.form.get('end_date')
+
+    # Validate inputs
+    if not all([name, description, start_date, end_date]):
+        return jsonify({'success': False, 'message': 'All fields are required'}), 400
+
+    try:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+        if end_date < start_date:
+            return jsonify({'success': False, 'message': 'End date cannot be before start date'}), 400
+    except ValueError:
+        return jsonify({'success': False, 'message': 'Invalid date format'}), 400
+
+    trip.name = name
+    trip.description = description
+    trip.start_date = start_date
+    trip.end_date = end_date
+
+    # Handle cover image upload
+    if 'cover_image' in request.files:
+        cover_image = request.files['cover_image']
+        if cover_image and allowed_file(cover_image.filename):
+            # Remove old cover image if exists
+            if trip.cover_image:
+                old_cover_path = os.path.join(app.config['UPLOAD_FOLDER'], trip.cover_image)
+                if os.path.exists(old_cover_path):
+                    os.remove(old_cover_path)
+
+            cover_filename = secure_filename(cover_image.filename)
+            cover_path = os.path.join(app.config['UPLOAD_FOLDER'], cover_filename)
+            cover_image.save(cover_path)
+            trip.cover_image = cover_filename
+
+    # Handle additional images
+    if 'images' in request.files:
+        new_images = request.files.getlist('images')
+        if new_images:
+            # Remove old images
+            if trip.image_filenames:
+                for old_filename in trip.image_filenames.split(','):
+                    if old_filename:
+                        old_path = os.path.join(app.config['UPLOAD_FOLDER'], old_filename)
+                        if os.path.exists(old_path):
+                            os.remove(old_path)
+
+            # Save new images
+            image_filenames = []
+            for image in new_images:
+                if image and allowed_file(image.filename):
+                    filename = secure_filename(image.filename)
+                    image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    image.save(image_path)
+                    image_filenames.append(filename)
+
+            trip.image_filenames = ",".join(image_filenames)
+
+    db.session.commit()
+
+    return jsonify({'success': True, 'message': 'Trip updated successfully'})
+
+# Route to delete a trip (only for the owner)
+@app.route('/delete_trip/<int:trip_id>', methods=['DELETE'])
+def delete_trip(trip_id):
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Please log in first'}), 401
+
+    trip = Trip.query.filter_by(id=trip_id, user_id=session['user_id']).first_or_404()
+
+    # Delete associated images
+    if trip.cover_image:
+        cover_path = os.path.join(app.config['UPLOAD_FOLDER'], trip.cover_image)
+        if os.path.exists(cover_path):
+            os.remove(cover_path)
+
+    if trip.image_filenames:
+        for filename in trip.image_filenames.split(','):
+            if filename:
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+
+    # Delete the trip
+    db.session.delete(trip)
+    db.session.commit()
+
+    return jsonify({'success': True, 'message': 'Trip deleted successfully'})
+
+
 
 @app.route('/currencycon')
 def currencycon():
@@ -239,8 +332,15 @@ def add_images():
 # Route to add a trip
 @app.route('/add_trip', methods=['GET', 'POST'])
 def add_trip():
+    if 'user_id' not in session:
+        return jsonify({
+            'success': False,
+            'message': 'Please log in first'
+        }), 401
+        
     if request.method == 'POST':
         try:
+            # Validate required fields
             name = request.form.get('name')
             description = request.form.get('description')
             start_date = request.form.get('start_date')
@@ -251,8 +351,8 @@ def add_trip():
                     'success': False,
                     'message': 'All fields are required'
                 }), 400
-            
-            # Convert string dates to datetime objects
+
+            # Validate dates
             try:
                 start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
                 end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
@@ -269,65 +369,56 @@ def add_trip():
                 }), 400
 
             # Handle cover image upload
-            cover_image = request.files.get('cover_image')
             cover_image_filename = None
-            if cover_image and cover_image.filename:
-                if not allowed_file(cover_image.filename):
+            if 'cover_image' in request.files:
+                cover_image = request.files['cover_image']
+                if cover_image and allowed_file(cover_image.filename):
+                    cover_image_filename = secure_filename(cover_image.filename)
+                    cover_path = os.path.join(app.config['UPLOAD_FOLDER'], cover_image_filename)
+                    cover_image.save(cover_path)
+                else:
                     return jsonify({
                         'success': False,
-                        'message': 'Invalid file type for cover image'
+                        'message': 'Invalid cover image format. Allowed formats: png, jpg, jpeg, gif'
                     }), 400
-                cover_image_filename = secure_filename(cover_image.filename)
-                cover_image_path = os.path.join(app.config['UPLOAD_FOLDER'], cover_image_filename)
-                cover_image.save(cover_image_path)
-            
-            # Handle multiple images upload
-            image_files = request.files.getlist('images')
-            image_filenames = []
-            upload_folder = app.config['UPLOAD_FOLDER']
-            if not os.path.exists(upload_folder):
-                os.makedirs(upload_folder)
-            
-            for image in image_files:
-                if image.filename:
-                    if not allowed_file(image.filename):
-                        continue  # Skip invalid files
-                    filename = secure_filename(image.filename)
-                    image_path = os.path.join(upload_folder, filename)
-                    image.save(image_path)
-                    image_filenames.append(filename)
 
-            # Create new trip
+            # Handle additional images
+            image_filenames = []
+            if 'images' in request.files:
+                new_images = request.files.getlist('images')
+                for image in new_images:
+                    if image and allowed_file(image.filename):
+                        filename = secure_filename(image.filename)
+                        image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                        image.save(image_path)
+                        image_filenames.append(filename)
+
+            # Create new trip with user_id
             new_trip = Trip(
+                user_id=session['user_id'],
                 name=name,
                 description=description,
-                cover_image=cover_image_filename,
                 start_date=start_date,
                 end_date=end_date,
-                image_filenames=",".join(image_filenames) if image_filenames else ""
+                cover_image=cover_image_filename,
+                image_filenames=','.join(image_filenames) if image_filenames else ''
             )
             
             db.session.add(new_trip)
             db.session.commit()
-
+            
             return jsonify({
                 'success': True,
-                'trip': {
-                    'id': new_trip.id,
-                    'name': new_trip.name,
-                    'description': new_trip.description,
-                    'cover_image': new_trip.cover_image,
-                    'start_date': new_trip.start_date.isoformat(),
-                    'end_date': new_trip.end_date.isoformat(),
-                    'image_filenames': new_trip.image_filenames
-                }
+                'message': 'Trip added successfully',
+                'trip_id': new_trip.id
             })
-
+            
         except Exception as e:
             db.session.rollback()
+            print(f"Error adding trip: {str(e)}")
             return jsonify({
                 'success': False,
-                'message': str(e)
+                'message': 'An error occurred while adding the trip. Please try again.'
             }), 500
 
     return render_template('add_trip.html')
@@ -452,163 +543,6 @@ def delete_document(doc_id):
     
     return redirect(url_for('dashboard1'))
 
-@app.route('/trips')
-def trips():
-    # Fetch all trips from the database
-    all_trips = Trip.query.all()
-    # Pass the trips list to the template
-    return render_template('trips.html', trips=all_trips)
-
-# Route to display trip details
-@app.route('/trips/<int:trip_id>')
-def trip_detail(trip_id):
-    # Fetch the specific trip from the database
-    trip = Trip.query.get_or_404(trip_id)
-    return render_template('trip_detail.html', trip=trip)
-
-# Route to save (edit) trip data
-@app.route('/save_trip/<int:trip_id>', methods=['POST'])
-def save_trip(trip_id):
-    try:
-        trip = Trip.query.get_or_404(trip_id)
-        
-        # Validate required fields
-        name = request.form.get('name')
-        description = request.form.get('description')
-        start_date = request.form.get('start_date')
-        end_date = request.form.get('end_date')
-        
-        if not all([name, description, start_date, end_date]):
-            return jsonify({
-                'success': False,
-                'message': 'All fields are required'
-            }), 400
-        
-        # Validate dates
-        try:
-            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-            
-            if end_date < start_date:
-                return jsonify({
-                    'success': False,
-                    'message': 'End date cannot be before start date'
-                }), 400
-        except ValueError:
-            return jsonify({
-                'success': False,
-                'message': 'Invalid date format'
-            }), 400
-
-        # Update trip data
-        trip.name = name
-        trip.description = description
-        trip.start_date = start_date
-        trip.end_date = end_date
-
-        # Handle cover image upload
-        if 'cover_image' in request.files:
-            cover_image = request.files['cover_image']
-            if cover_image and cover_image.filename:
-                if not allowed_file(cover_image.filename):
-                    return jsonify({
-                        'success': False,
-                        'message': 'Invalid file type for cover image'
-                    }), 400
-                
-                # Delete old cover image
-                if trip.cover_image:
-                    old_cover_path = os.path.join(app.config['UPLOAD_FOLDER'], trip.cover_image)
-                    if os.path.exists(old_cover_path):
-                        os.remove(old_cover_path)
-                
-                # Save new cover image
-                cover_image_filename = secure_filename(cover_image.filename)
-                cover_image_path = os.path.join(app.config['UPLOAD_FOLDER'], cover_image_filename)
-                cover_image.save(cover_image_path)
-                trip.cover_image = cover_image_filename
-
-        # Handle additional images
-        if 'images' in request.files:
-            new_images = request.files.getlist('images')
-            if new_images:
-                # Delete old images
-                if trip.image_filenames:
-                    for old_filename in trip.image_filenames.split(','):
-                        if old_filename:
-                            old_path = os.path.join(app.config['UPLOAD_FOLDER'], old_filename)
-                            if os.path.exists(old_path):
-                                os.remove(old_path)
-                
-                # Save new images
-                image_filenames = []
-                for image in new_images:
-                    if image and image.filename:
-                        if not allowed_file(image.filename):
-                            continue
-                        filename = secure_filename(image.filename)
-                        image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                        image.save(image_path)
-                        image_filenames.append(filename)
-                
-                trip.image_filenames = ",".join(image_filenames)
-
-        db.session.commit()
-        
-        return jsonify({
-            'success': True,
-            'message': 'Trip updated successfully',
-            'trip': {
-                'id': trip.id,
-                'name': trip.name,
-                'description': trip.description,
-                'cover_image': trip.cover_image,
-                'start_date': trip.start_date.isoformat(),
-                'end_date': trip.end_date.isoformat(),
-                'image_filenames': trip.image_filenames
-            }
-        })
-        
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({
-            'success': False,
-            'message': str(e)
-        }), 500
-
-# Route to display all trips
-@app.route('/trips')
-def show_trips():
-    # Fetch all trips from the database
-    all_trips = Trip.query.all()
-    return render_template('trips.html', trips=all_trips)
-
-@app.route('/delete_trip/<int:trip_id>', methods=['DELETE'])
-def delete_trip(trip_id):
-    try:
-        trip = Trip.query.get_or_404(trip_id)
-        
-        # Delete cover image
-        if trip.cover_image:
-            cover_image_path = os.path.join(app.config['UPLOAD_FOLDER'], trip.cover_image)
-            if os.path.exists(cover_image_path):
-                os.remove(cover_image_path)
-        
-        # Delete additional images
-        if trip.image_filenames:
-            for filename in trip.image_filenames.split(','):
-                if filename:
-                    image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                    if os.path.exists(image_path):
-                        os.remove(image_path)
-        
-        db.session.delete(trip)
-        db.session.commit()
-        
-        return jsonify({'message': 'Trip deleted successfully'})
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'message': str(e)}), 500
 
 @app.route('/logout')
 def logout():
@@ -925,5 +859,40 @@ def download_document(doc_id):
     
     return redirect(url_for('dashboard1'))
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        if not username or not email or not password:
+            flash('All fields are required', 'error')
+            return redirect(url_for('register'))
+        
+        if User.query.filter_by(username=username).first():
+            flash('Username already exists', 'error')
+            return redirect(url_for('register'))
+            
+        if User.query.filter_by(email=email).first():
+            flash('Email already registered', 'error')
+            return redirect(url_for('register'))
+        
+        hashed_password = generate_password_hash(password)
+        new_user = User(username=username, email=email, password=hashed_password)
+        
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Registration successful! Please login.', 'success')
+            return redirect(url_for('login'))
+        except Exception as e:
+            db.session.rollback()
+            flash('An error occurred. Please try again.', 'error')
+            return redirect(url_for('register'))
+    
+    return render_template('register.html')
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, debug=False)
+    # app.run(host='0.0.0.0', port=8000, debug=False)
+      app.run(port=5000, debug=False)

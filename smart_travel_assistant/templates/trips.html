@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Trips</title>
+    <title>My Trips</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #67b1e6;
         }
 
         .header {
@@ -23,11 +23,11 @@
 
         .header h1 {
             margin: 0;
-            color: #333;
+            color: #050a0f;
         }
 
         .add-trip-btn {
-            background-color: #4CAF50;
+            background-color: #1976d2;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -41,7 +41,7 @@
         }
 
         .add-trip-btn:hover {
-            background-color: #45a049;
+            background-color: #1565c0;
         }
 
         .trip-container {
@@ -54,9 +54,9 @@
         }
 
         .trip-card {
-            background-color: #fff;
+            background-color: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.1);
             overflow: hidden;
             position: relative;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -64,7 +64,7 @@
 
         .trip-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 16px rgba(21, 101, 192, 0.15);
         }
 
         .trip-card img.cover-image {
@@ -79,7 +79,7 @@
 
         .trip-card h2 {
             margin: 0 0 15px;
-            color: #333;
+            color: #1565c0;
             font-size: 1.4em;
         }
 
@@ -89,14 +89,14 @@
 
         .trip-info p {
             margin: 8px 0;
-            color: #666;
+            color: #546e7a;
             font-size: 0.95em;
             line-height: 1.4;
         }
 
         .trip-info .label {
             font-weight: 600;
-            color: #444;
+            color: #1976d2;
         }
 
         .images-gallery {
@@ -105,7 +105,7 @@
             gap: 10px;
             margin-top: 15px;
             padding: 10px;
-            background: #f8f9fa;
+            background: #f5f9ff;
             border-radius: 8px;
         }
 
@@ -118,14 +118,13 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 4px;
         }
 
         .delete-image-btn {
             position: absolute;
             top: -8px;
             right: -8px;
-            background: #ff4444;
+            background: #f44336;
             color: white;
             border: none;
             border-radius: 50%;
@@ -172,59 +171,15 @@
         }
 
         .edit-btn {
-            background-color: #3498db;
+            background-color: #1976d2;
         }
 
         .delete-btn {
-            background-color: #e74c3c;
+            background-color: #f44336;
         }
 
         .action-btn:hover {
             transform: scale(1.1);
-        }
-
-        .edit-mode {
-            display: none;
-            padding: 20px;
-        }
-
-        .edit-mode input,
-        .edit-mode textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .edit-mode textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .edit-mode .date-input {
-            width: calc(50% - 10px);
-            display: inline-block;
-        }
-
-        .edit-mode .date-input + .date-input {
-            margin-left: 20px;
-        }
-
-        .save-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-        }
-
-        .save-btn:hover {
-            background-color: #45a049;
         }
 
         .modal {
@@ -245,160 +200,129 @@
         }
 
         .modal-content {
-            background-color: #fefefe;
+            background-color: #ffffff;
             margin: 40px auto;
             width: 90%;
             max-width: 600px;
-            position: relative;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .modal-header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px 8px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h2 {
-            margin: 0;
-            color: white;
-            font-size: 1.5em;
+            padding: 20px;
         }
 
         .close-modal {
-            color: white;
-            background: none;
-            border: none;
-            font-size: 24px;
+            float: right;
             cursor: pointer;
-            padding: 0;
-            line-height: 1;
+            font-size: 24px;
+            color: #1565c0;
         }
 
-        .close-modal:hover {
-            opacity: 0.8;
-        }
-
-        .modal-body {
-            padding: 20px;
-            max-height: calc(100vh - 200px);
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
             overflow-y: auto;
         }
 
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 800px;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.2);
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #1976d2;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #1565c0;
+        }
+
+        /* Form Styles */
         .form-group {
             margin-bottom: 20px;
         }
 
-        .form-group label {
+        label {
             display: block;
-            margin-bottom: 5px;
-            color: #333;
+            margin-bottom: 8px;
+            color: #1976d2;
             font-weight: 500;
         }
 
-        .form-group input[type="text"],
-        .form-group input[type="date"],
-        .form-group textarea {
+        input[type="text"],
+        input[type="date"],
+        textarea {
             width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
             transition: border-color 0.3s;
         }
 
-        .form-group input[type="text"]:focus,
-        .form-group input[type="date"]:focus,
-        .form-group textarea:focus {
-            border-color: #4CAF50;
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        textarea:focus {
+            border-color: #1976d2;
             outline: none;
-            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
         }
 
-        .form-group textarea {
-            min-height: 100px;
+        textarea {
+            min-height: 120px;
             resize: vertical;
         }
 
-        .file-input {
+        .image-upload {
+            margin-bottom: 20px;
+        }
+
+        .image-upload input[type="file"] {
+            display: none;
+        }
+
+        .image-upload label {
             display: inline-block;
-            padding: 8px 16px;
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .file-input:hover {
-            background-color: #e9ecef;
-            border-color: #4CAF50;
-        }
-
-        .file-input i {
-            margin-right: 8px;
-        }
-
-        .modal-footer {
-            padding: 15px 20px;
-            background-color: #f8f9fa;
-            border-top: 1px solid #ddd;
-            border-radius: 0 0 8px 8px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        .modal-footer button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-            min-width: 100px;
-        }
-
-        .cancel-btn {
-            background-color: #e9ecef;
-            color: #333;
-        }
-
-        .submit-btn {
-            background-color: #4CAF50;
+            padding: 10px 20px;
+            background-color: #1976d2;
             color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        .cancel-btn:hover {
-            background-color: #dde2e6;
-        }
-
-        .submit-btn:hover {
-            background-color: #45a049;
+        .image-upload label:hover {
+            background-color: #1565c0;
         }
 
         .image-preview {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 10px;
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #f8f9fa;
-            border-radius: 4px;
-            max-height: 150px;
-            overflow-y: auto;
+            margin-top: 15px;
         }
 
         .preview-item {
             position: relative;
             aspect-ratio: 1;
-            border-radius: 4px;
+            border-radius: 6px;
             overflow: hidden;
         }
 
@@ -409,166 +333,6 @@
         }
 
         .remove-preview {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            background-color: rgba(255, 0, 0, 0.7);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        @media (max-width: 768px) {
-            .trip-container {
-                grid-template-columns: 1fr;
-                padding: 10px;
-            }
-
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-
-            .modal-content {
-                width: 95%;
-                margin: 20px auto;
-            }
-
-            .modal-body {
-                max-height: calc(100vh - 160px);
-                padding: 15px;
-            }
-
-            .form-group {
-                margin-bottom: 15px;
-            }
-
-            .modal-header,
-            .modal-footer {
-                padding: 12px 15px;
-            }
-        }
-
-        .modal-body::-webkit-scrollbar,
-        .image-preview::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .modal-body::-webkit-scrollbar-track,
-        .image-preview::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        .modal-body::-webkit-scrollbar-thumb,
-        .image-preview::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 3px;
-        }
-
-        .modal-body::-webkit-scrollbar-thumb:hover,
-        .image-preview::-webkit-scrollbar-thumb:hover {
-            background: #666;
-        }
-
-        /* Alert styles */
-        .alert {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 4px;
-            color: white;
-            font-weight: 500;
-            z-index: 1000;
-            animation: slideIn 0.3s ease-out;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        .alert-success {
-            background-color: #4CAF50;
-        }
-
-        .alert-error {
-            background-color: #f44336;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Form validation styles */
-        input:invalid, textarea:invalid {
-            border-color: #f44336;
-        }
-
-        input:valid, textarea:valid {
-            border-color: #4CAF50;
-        }
-
-        /* Loading state styles */
-        .loading {
-            position: relative;
-            pointer-events: none;
-            opacity: 0.7;
-        }
-
-        .loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            border: 2px solid #4CAF50;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Image preview improvements */
-        .image-preview {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .image-container {
-            position: relative;
-            aspect-ratio: 1;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .delete-image-btn {
             position: absolute;
             top: 5px;
             right: 5px;
@@ -582,648 +346,375 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.2s;
         }
 
-        .delete-image-btn:hover {
+        .remove-preview:hover {
             background: rgba(244, 67, 54, 1);
         }
 
-        /* Modal improvements */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-
-        .modal-content {
-            position: relative;
-            background: white;
-            margin: 20px auto;
-            padding: 20px;
-            width: 90%;
-            max-width: 600px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .modal-body {
-            margin-bottom: 20px;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-
-        /* Form improvements */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="date"],
-        .form-group textarea {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            transition: border-color 0.2s;
-        }
-
-        .form-group input[type="text"]:focus,
-        .form-group input[type="date"]:focus,
-        .form-group textarea:focus {
-            border-color: #4CAF50;
-            outline: none;
-        }
-
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        /* Button improvements */
-        .submit-btn,
-        .save-btn,
-        .cancel-btn {
-            padding: 8px 16px;
+        .submit-btn {
+            background-color: #1976d2;
+            color: white;
+            padding: 12px 24px;
             border: none;
-            border-radius: 4px;
-            font-weight: 500;
+            border-radius: 6px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            position: relative;
         }
 
-        .submit-btn,
-        .save-btn {
-            background-color: #4CAF50;
-            color: white;
+        .submit-btn:hover {
+            background-color: #1565c0;
         }
 
-        .submit-btn:hover,
-        .save-btn:hover {
-            background-color: #45a049;
+        .submit-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
         }
 
-        .cancel-btn {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .cancel-btn:hover {
-            background-color: #da190b;
-        }
-
-        /* File input improvements */
-        .file-input {
-            display: inline-block;
-            padding: 8px 16px;
-            background-color: #f5f5f5;
-            border: 1px dashed #ddd;
+        .error-message {
+            color: #f44336;
+            margin-top: 5px;
+            font-size: 14px;
+            padding: 10px;
+            background-color: #ffebee;
             border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.2s;
         }
 
-        .file-input:hover {
-            background-color: #e0e0e0;
+        .success-message {
+            color: #1976d2;
+            margin-top: 5px;
+            font-size: 14px;
+            padding: 10px;
+            background-color: #e3f2fd;
+            border-radius: 4px;
         }
 
-        .file-input i {
-            margin-right: 8px;
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #1976d2;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>My Trips</h1>
-        <button class="add-trip-btn" onclick="openAddTripModal()">
-            <i class="fas fa-plus"></i> Add New Trip
-        </button>
+        <a href="#" class="add-trip-btn">
+            <i class="fas fa-plus"></i> Add Trip
+        </a>
     </div>
 
     <div class="trip-container">
         {% for trip in trips %}
-        <div class="trip-card" id="card-{{ trip.id }}">
+        <div class="trip-card">
             {% if trip.cover_image %}
-                <img class="cover-image" src="{{ url_for('static', filename='uploads/' + trip.cover_image) }}" alt="Cover Image for {{ trip.name }}">
-            {% else %}
-                <img class="cover-image" src="{{ url_for('static', filename='images/default-trip.jpg') }}" alt="Default trip image">
+            <img src="{{ url_for('static', filename='uploads/' + trip.cover_image) }}" alt="{{ trip.name }}" class="cover-image">
             {% endif %}
 
+            <div class="card-info">
+                    <h2>{{ trip.name }}</h2>
+                    <div class="trip-info">
+                    <p><span class="label">Description:</span> {{ trip.description }}</p>
+                    <p><span class="label">Start Date:</span> {{ trip.start_date.strftime('%Y-%m-%d') }}</p>
+                    <p><span class="label">End Date:</span> {{ trip.end_date.strftime('%Y-%m-%d') }}</p>
+                    </div>
+
+                        {% if trip.image_filenames %}
+                <div class="images-gallery">
+                            {% for filename in trip.image_filenames.split(',') %}
+                    {% if filename %}
+                                <div class="image-container">
+                                    <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Trip image">
+                        <button class="delete-image-btn" onclick="deleteImage('{{ filename }}', {{ trip.id }})">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                    {% endif %}
+                            {% endfor %}
+                </div>
+                        {% endif %}
+                </div>
+
             <div class="card-actions">
-                <button class="action-btn edit-btn" onclick="toggleEditMode({{ loop.index }})">
+                <button class="action-btn edit-btn" onclick="editTrip({{ trip.id }})">
                     <i class="fas fa-edit"></i>
                 </button>
                 <button class="action-btn delete-btn" onclick="deleteTrip({{ trip.id }})">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
-
-            <div class="card-info" id="card-info-{{ loop.index }}">
-                <div class="view-mode">
-                    <h2>{{ trip.name }}</h2>
-                    <div class="trip-info">
-                        <p><span class="label">Description:</span><br>{{ trip.description }}</p>
-                        <p><span class="label">Start Date:</span> {{ trip.start_date.strftime('%B %d, %Y') }}</p>
-                        <p><span class="label">End Date:</span> {{ trip.end_date.strftime('%B %d, %Y') }}</p>
-                    </div>
-
-                    <div class="images-gallery">
-                        {% if trip.image_filenames %}
-                            {% for filename in trip.image_filenames.split(',') %}
-                                <div class="image-container">
-                                    <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Trip image">
-                                    <button class="delete-image-btn" onclick="deleteImage('{{ filename }}', {{ trip.id }}, {{ loop.index }})">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            {% endfor %}
-                        {% else %}
-                            <p class="no-images">No additional images</p>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="edit-mode">
-                    <form method="POST" enctype="multipart/form-data" action="{{ url_for('save_trip', trip_id=trip.id) }}">
-                        <input type="text" name="name" value="{{ trip.name }}" placeholder="Trip Name" required>
-                        <textarea name="description" placeholder="Trip Description" required>{{ trip.description }}</textarea>
-                        
-                        <div class="date-inputs">
-                            <input type="date" name="start_date" value="{{ trip.start_date }}" class="date-input" required>
-                            <input type="date" name="end_date" value="{{ trip.end_date }}" class="date-input" required>
-                        </div>
-
-                        <input type="file" name="cover_image" accept="image/*">
-                        <input type="file" name="images" multiple accept="image/*">
-
-                        <button type="submit" class="save-btn">Save Changes</button>
-                    </form>
-                </div>
-            </div>
         </div>
         {% endfor %}
+                        </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2>Edit Trip</h2>
+            <form id="editTripForm" enctype="multipart/form-data">
+                <input type="hidden" id="tripId" name="trip_id">
+                <div>
+                    <label for="editName">Trip Name:</label>
+                    <input type="text" id="editName" name="name" required>
+                </div>
+                <div>
+                    <label for="editDescription">Description:</label>
+                    <textarea id="editDescription" name="description" required></textarea>
+            </div>
+                <div>
+                    <label for="editStartDate">Start Date:</label>
+                    <input type="date" id="editStartDate" name="start_date" required>
+        </div>
+                <div>
+                    <label for="editEndDate">End Date:</label>
+                    <input type="date" id="editEndDate" name="end_date" required>
+                </div>
+                <div>
+                    <label for="editCoverImage">Cover Image:</label>
+                    <input type="file" id="editCoverImage" name="cover_image" accept="image/*">
+                </div>
+                <div>
+                    <label for="editImages">Additional Images:</label>
+                    <input type="file" id="editImages" name="images" accept="image/*" multiple>
+                </div>
+                <button type="submit" class="save-btn">Save Changes</button>
+            </form>
+        </div>
     </div>
 
     <!-- Add Trip Modal -->
     <div id="addTripModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2>Add New Trip</h2>
-                <button class="close-modal" onclick="closeAddTripModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <form id="addTripForm" method="POST" enctype="multipart/form-data" action="{{ url_for('add_trip') }}">
-                <div class="modal-body">
+            <span class="close">&times;</span>
+            <h2>Add a New Trip</h2>
+            <form id="addTripForm" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="tripName">Trip Name</label>
-                        <input type="text" id="tripName" name="name" required placeholder="Enter trip name">
+                    <label for="name">Trip Name:</label>
+                    <input type="text" id="name" name="name" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="tripDescription">Description</label>
-                        <textarea id="tripDescription" name="description" required placeholder="Describe your trip"></textarea>
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" required></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="startDate">Start Date</label>
-                        <input type="date" id="startDate" name="start_date" required>
+                    <label for="cover_image">Cover Image:</label>
+                    <input type="file" id="cover_image" name="cover_image" accept="image/*" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="endDate">End Date</label>
-                        <input type="date" id="endDate" name="end_date" required>
+                    <label for="start_date">Start Date:</label>
+                    <input type="date" id="start_date" name="start_date" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="coverImage">Cover Image</label>
-                        <label class="file-input" for="coverImage">
-                            <i class="fas fa-image"></i>
-                            <span>Choose cover image</span>
-                            <input type="file" id="coverImage" name="cover_image" accept="image/*" style="display: none;">
+                    <label for="end_date">End Date:</label>
+                    <input type="date" id="end_date" name="end_date" required>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="images">Additional Images:</label>
+                    <div class="image-upload">
+                        <label for="images">
+                            <i class="fas fa-images"></i> Upload Images
                         </label>
-                        <div id="coverPreview" class="image-preview"></div>
+                        <input type="file" id="images" name="images" accept="image/*" multiple>
                     </div>
-
-                    <div class="form-group">
-                        <label for="tripImages">Additional Images</label>
-                        <label class="file-input" for="tripImages">
-                            <i class="fas fa-images"></i>
-                            <span>Choose additional images</span>
-                            <input type="file" id="tripImages" name="images" multiple accept="image/*" style="display: none;">
-                        </label>
-                        <div id="imagesPreview" class="image-preview"></div>
-                    </div>
+                    <div id="imagePreview" class="image-preview"></div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="cancel-btn" onclick="closeAddTripModal()">Cancel</button>
-                    <button type="submit" class="submit-btn">Create Trip</button>
+
+                <div class="form-group">
+                    <button type="submit" class="submit-btn">Add Trip</button>
                 </div>
             </form>
+            <div id="message"></div>
         </div>
     </div>
 
     <script>
-        // Form submission handling
-        document.getElementById('addTripForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            
-            fetch('{{ url_for("add_trip") }}', {
-                method: 'POST',
-                body: formData
+        function editTrip(tripId) {
+            const modal = document.getElementById('editModal');
+            const form = document.getElementById('editTripForm');
+            form.action = `/save_trip/${tripId}`;
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('editModal');
+            modal.classList.remove('show');
+        }
+
+        function deleteTrip(tripId) {
+            if (confirm('Are you sure you want to delete this trip?')) {
+                fetch(`/delete_trip/${tripId}`, {
+                    method: 'DELETE'
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Create new trip card
-                    const trip = data.trip;
-                    const tripCard = createTripCard(trip);
-                    document.querySelector('.trip-container').insertBefore(tripCard, document.querySelector('.trip-container').firstChild);
-                    
-                    // Close modal and reset form
-                    closeAddTripModal();
-                    this.reset();
-                    document.getElementById('coverPreview').innerHTML = '';
-                    document.getElementById('imagesPreview').innerHTML = '';
-                    
-                    // Show success message
-                    showAlert('Trip added successfully!', 'success');
-                } else {
-                    showAlert(data.message || 'Error adding trip', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showAlert('Error adding trip', 'error');
-            });
-        });
-
-        // Edit trip handling
-        function toggleEditMode(index) {
-            const cardInfo = document.getElementById('card-info-' + index);
-            const editMode = cardInfo.querySelector('.edit-mode');
-            const viewMode = cardInfo.querySelector('.view-mode');
-            const form = editMode.querySelector('form');
-            const tripId = form.action.split('/').pop();
-
-            if (editMode.style.display === 'none') {
-                editMode.style.display = 'block';
-                viewMode.style.display = 'none';
-
-                // Display existing cover image preview
-                const coverImage = cardInfo.closest('.trip-card').querySelector('.cover-image');
-                const coverPreview = form.querySelector('#coverPreview') || document.createElement('div');
-                coverPreview.id = 'coverPreview';
-                coverPreview.className = 'image-preview';
-                
-                if (coverImage.src.includes('default-trip.jpg')) {
-                    coverPreview.innerHTML = '';
-                } else {
-                    coverPreview.innerHTML = `
-                        <div class="image-container">
-                            <img src="${coverImage.src}" alt="Current cover image">
-                            <button class="delete-image-btn" type="button" onclick="removePreview(this)">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    `;
-                }
-
-                // Display existing additional images preview
-                const imagesGallery = viewMode.querySelector('.images-gallery');
-                const imagesPreview = form.querySelector('#imagesPreview') || document.createElement('div');
-                imagesPreview.id = 'imagesPreview';
-                imagesPreview.className = 'image-preview';
-                
-                if (imagesGallery.querySelector('.no-images')) {
-                    imagesPreview.innerHTML = '';
-                } else {
-                    imagesPreview.innerHTML = Array.from(imagesGallery.querySelectorAll('.image-container')).map(container => {
-                        const img = container.querySelector('img');
-                        const filename = img.src.split('/').pop();
-                        return `
-                            <div class="image-container">
-                                <img src="${img.src}" alt="Trip image">
-                                <button class="delete-image-btn" type="button" onclick="removePreview(this)">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        `;
-                    }).join('');
-                }
-
-                // Add preview containers to the form if they don't exist
-                if (!form.querySelector('#coverPreview')) {
-                    form.insertBefore(coverPreview, form.querySelector('button[type="submit"]'));
-                }
-                if (!form.querySelector('#imagesPreview')) {
-                    form.insertBefore(imagesPreview, form.querySelector('button[type="submit"]'));
-                }
-            } else {
-                editMode.style.display = 'none';
-                viewMode.style.display = 'block';
-            }
-
-            // Handle form submission
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(this);
-
-                // Add loading state
-                const submitBtn = form.querySelector('.save-btn');
-                submitBtn.disabled = true;
-                submitBtn.classList.add('loading');
-
-                fetch(this.action, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Update trip card
-                        const trip = data.trip;
-                        updateTripCard(index, trip);
-                        
-                        // Switch back to view mode
-                        editMode.style.display = 'none';
-                        viewMode.style.display = 'block';
-                        
-                        // Reset form
-                        form.reset();
-                        
-                        showAlert('Trip updated successfully!', 'success');
+                        location.reload();
                     } else {
-                        showAlert(data.message || 'Error updating trip', 'error');
+                        alert(data.message);
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    showAlert('Error updating trip', 'error');
-                })
-                .finally(() => {
-                    // Remove loading state
-                    submitBtn.disabled = false;
-                    submitBtn.classList.remove('loading');
-                });
-            });
-        }
-
-        // Delete trip handling
-        function deleteTrip(tripId) {
-            if (confirm('Are you sure you want to delete this trip? This action cannot be undone.')) {
-                fetch(`/delete_trip/${tripId}`, {
-                    method: 'DELETE'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message === 'Trip deleted successfully') {
-                        const card = document.getElementById('card-' + tripId);
-                        card.style.animation = 'fadeOut 0.3s ease';
-                        setTimeout(() => card.remove(), 300);
-                        showAlert('Trip deleted successfully!', 'success');
-                    } else {
-                        showAlert(data.message || 'Error deleting trip', 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showAlert('Error deleting trip', 'error');
+                    alert('An error occurred while deleting the trip.');
                 });
             }
         }
 
-        // Delete image handling
-        function deleteImage(filename, tripId, index) {
+        function deleteImage(filename, tripId) {
             if (confirm('Are you sure you want to delete this image?')) {
                 fetch(`/delete_image/${filename}/${tripId}`, {
                     method: 'DELETE'
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.message === 'Image deleted successfully') {
-                        const imageContainer = document.querySelector(`#card-${tripId} .image-container img[src*='${filename}']`).parentElement;
-                        imageContainer.remove();
-                        showAlert('Image deleted successfully!', 'success');
-                    } else {
-                        showAlert(data.message || 'Error deleting image', 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showAlert('Error deleting image', 'error');
+                    if (data.message) {
+                        location.reload();
+                } else {
+                        alert('Error deleting image');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                    alert('An error occurred while deleting the image.');
                 });
             }
         }
 
-        // Image preview handling
-        document.querySelectorAll('input[type="file"]').forEach(input => {
-            input.addEventListener('change', function() {
-                const previewContainer = this.id === 'coverImage' ? 
-                    document.getElementById('coverPreview') : 
-                    document.getElementById('imagesPreview');
-                
-                previewContainer.innerHTML = '';
-                
-                if (this.files) {
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Modal functionality
+        const modal = document.getElementById('addTripModal');
+        const addTripBtn = document.querySelector('.add-trip-btn');
+        const closeBtn = document.querySelector('.close');
+
+        addTripBtn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Add Trip Form submission
+        document.getElementById('addTripForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+            
+                const formData = new FormData(this);
+            const messageDiv = document.getElementById('message');
+            const submitBtn = this.querySelector('.submit-btn');
+
+                // Add loading state
+                submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+
+            fetch('{{ url_for("add_trip") }}', {
+                    method: 'POST',
+                    body: formData
+                })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.message || 'An error occurred');
+                    });
+                }
+                return response.json();
+            })
+                .then(data => {
+                    if (data.success) {
+                    messageDiv.innerHTML = `<div class="success-message">${data.message}</div>`;
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                    } else {
+                    messageDiv.innerHTML = `<div class="error-message">${data.message}</div>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                messageDiv.innerHTML = `<div class="error-message">${error.message}</div>`;
+                })
+                .finally(() => {
+                    // Remove loading state
+                    submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+                });
+            });
+
+        // Image preview functionality
+        document.getElementById('images').addEventListener('change', function(e) {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            
                     Array.from(this.files).forEach(file => {
-                        if (!file.type.startsWith('image/')) {
-                            showAlert('Please select only image files', 'error');
-                            return;
-                        }
-                        
+                if (file.type.startsWith('image/')) {
                         const reader = new FileReader();
-                        const imgContainer = document.createElement('div');
-                        imgContainer.className = 'image-container';
+                    const div = document.createElement('div');
+                    div.className = 'preview-item';
                         
-                        reader.onload = e => {
-                            imgContainer.innerHTML = `
+                    reader.onload = function(e) {
+                        div.innerHTML = `
                                 <img src="${e.target.result}" alt="Preview">
-                                <button class="delete-image-btn" type="button" onclick="removePreview(this)">
+                            <button type="button" class="remove-preview" onclick="this.parentElement.remove()">
                                     <i class="fas fa-times"></i>
                                 </button>
                             `;
-                            previewContainer.appendChild(imgContainer);
+                        preview.appendChild(div);
                         };
                         
                         reader.readAsDataURL(file);
-                    });
                 }
             });
         });
 
-        // Helper functions
-        function createTripCard(trip) {
-            const card = document.createElement('div');
-            card.className = 'trip-card';
-            card.id = `card-${trip.id}`;
+        // Date validation
+        document.getElementById('end_date').addEventListener('change', function() {
+            const startDate = document.getElementById('start_date').value;
+            const endDate = this.value;
             
-            card.innerHTML = `
-                ${trip.cover_image ? 
-                    `<img class="cover-image" src="/static/uploads/${trip.cover_image}" alt="Cover Image for ${trip.name}">` :
-                    `<img class="cover-image" src="/static/images/default-trip.jpg" alt="Default trip image">`
-                }
-                <div class="card-actions">
-                    <button class="action-btn edit-btn" onclick="toggleEditMode(${trip.id})">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="action-btn delete-btn" onclick="deleteTrip(${trip.id})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-                <div class="card-info" id="card-info-${trip.id}">
-                    <div class="view-mode">
-                        <h2>${trip.name}</h2>
-                        <div class="trip-info">
-                            <p><span class="label">Description:</span><br>${trip.description}</p>
-                            <p><span class="label">Start Date:</span> ${new Date(trip.start_date).toLocaleDateString()}</p>
-                            <p><span class="label">End Date:</span> ${new Date(trip.end_date).toLocaleDateString()}</p>
-                        </div>
-                        <div class="images-gallery">
-                            ${trip.image_filenames ? trip.image_filenames.split(',').map(filename => `
-                                <div class="image-container">
-                                    <img src="/static/uploads/${filename}" alt="Trip image">
-                                    <button class="delete-image-btn" onclick="deleteImage('${filename}', ${trip.id}, ${trip.id})">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            `).join('') : '<p class="no-images">No additional images</p>'}
-                        </div>
-                    </div>
-                    <div class="edit-mode" style="display: none;">
-                        <form method="POST" enctype="multipart/form-data" action="/save_trip/${trip.id}">
-                            <input type="text" name="name" value="${trip.name}" placeholder="Trip Name" required>
-                            <textarea name="description" placeholder="Trip Description" required>${trip.description}</textarea>
-                            <div class="date-inputs">
-                                <input type="date" name="start_date" value="${trip.start_date}" required>
-                                <input type="date" name="end_date" value="${trip.end_date}" required>
-                            </div>
-                            <input type="file" name="cover_image" accept="image/*">
-                            <input type="file" name="images" multiple accept="image/*">
-                            <button type="submit" class="save-btn">Save Changes</button>
-                        </form>
-                    </div>
-                </div>
-            `;
-            
-            return card;
-        }
-
-        function updateTripCard(index, trip) {
-            const card = document.getElementById(`card-${trip.id}`);
-            if (!card) return;
-
-            // Update cover image
-            const coverImage = card.querySelector('.cover-image');
-            if (coverImage) {
-                coverImage.src = trip.cover_image_url || '/static/images/default-trip.jpg';
-            }
-
-            // Update trip info
-            const viewMode = card.querySelector('.view-mode');
-            if (viewMode) {
-                viewMode.querySelector('h2').textContent = trip.name;
-                viewMode.querySelector('.trip-info p:nth-child(1)').innerHTML = `<span class="label">Description:</span><br>${trip.description}`;
-                viewMode.querySelector('.trip-info p:nth-child(2)').innerHTML = `<span class="label">Start Date:</span> ${new Date(trip.start_date).toLocaleDateString()}`;
-                viewMode.querySelector('.trip-info p:nth-child(3)').innerHTML = `<span class="label">End Date:</span> ${new Date(trip.end_date).toLocaleDateString()}`;
-            }
-
-            // Update images gallery
-            const imagesGallery = card.querySelector('.images-gallery');
-            if (imagesGallery) {
-                if (trip.image_urls && trip.image_urls.length > 0) {
-                    imagesGallery.innerHTML = trip.image_urls.map(url => `
-                        <div class="image-container">
-                            <img src="${url}" alt="Trip image">
-                            <button class="delete-image-btn" onclick="deleteImage('${url.split('/').pop()}', ${trip.id}, ${trip.id})">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    `).join('');
+            if (startDate && endDate && endDate < startDate) {
+                this.setCustomValidity('End date cannot be before start date');
                 } else {
-                    imagesGallery.innerHTML = '<p class="no-images">No additional images</p>';
-                }
+                this.setCustomValidity('');
             }
-
-            // Update edit form
-            const editMode = card.querySelector('.edit-mode');
-            if (editMode) {
-                const form = editMode.querySelector('form');
-                form.querySelector('input[name="name"]').value = trip.name;
-                form.querySelector('textarea[name="description"]').value = trip.description;
-                form.querySelector('input[name="start_date"]').value = trip.start_date;
-                form.querySelector('input[name="end_date"]').value = trip.end_date;
-            }
-        }
-
-        function removePreview(button) {
-            const container = button.parentElement;
-            const previewContainer = container.parentElement;
-            container.remove();
-            
-            // If this was a cover image preview, clear the file input
-            if (previewContainer.id === 'coverPreview') {
-                document.getElementById('coverImage').value = '';
-            }
-        }
-
-        function showAlert(message, type) {
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type}`;
-            alert.textContent = message;
-            document.body.appendChild(alert);
-            
-            setTimeout(() => {
-                alert.remove();
-            }, 3000);
-        }
-
-        // Modal handling
-        function openAddTripModal() {
-            document.getElementById('addTripModal').style.display = 'block';
-        }
-
-        function closeAddTripModal() {
-            document.getElementById('addTripModal').style.display = 'none';
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('addTripModal');
-            if (event.target === modal) {
-                closeAddTripModal();
-            }
-        }
+        });
     </script>
 </body>
 </html>
