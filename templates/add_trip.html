@@ -10,20 +10,20 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #67b1e6;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background-color: white;
+            background-color: rgb(155, 198, 243);
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.1);
         }
 
         h1 {
-            color: #333;
+            color: #050a0f;
             margin-bottom: 30px;
         }
 
@@ -34,7 +34,7 @@
         label {
             display: block;
             margin-bottom: 8px;
-            color: #555;
+            color: #1976d2;
             font-weight: 500;
         }
 
@@ -43,7 +43,7 @@
         textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid #e0e0e0;
             border-radius: 6px;
             font-size: 16px;
             transition: border-color 0.3s;
@@ -52,8 +52,9 @@
         input[type="text"]:focus,
         input[type="date"]:focus,
         textarea:focus {
-            border-color: #4CAF50;
+            border-color: #1976d2;
             outline: none;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
         }
 
         textarea {
@@ -72,7 +73,7 @@
         .image-upload label {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #4CAF50;
+            background-color: #1976d2;
             color: white;
             border-radius: 6px;
             cursor: pointer;
@@ -80,7 +81,7 @@
         }
 
         .image-upload label:hover {
-            background-color: #45a049;
+            background-color: #1565c0;
         }
 
         .image-preview {
@@ -107,7 +108,7 @@
             position: absolute;
             top: 5px;
             right: 5px;
-            background: rgba(255, 0, 0, 0.7);
+            background: rgba(244, 67, 54, 0.9);
             color: white;
             border: none;
             border-radius: 50%;
@@ -119,8 +120,12 @@
             justify-content: center;
         }
 
+        .remove-preview:hover {
+            background: rgba(244, 67, 54, 1);
+        }
+
         .submit-btn {
-            background-color: #4CAF50;
+            background-color: #1976d2;
             color: white;
             padding: 12px 24px;
             border: none;
@@ -132,7 +137,7 @@
         }
 
         .submit-btn:hover {
-            background-color: #45a049;
+            background-color: #1565c0;
         }
 
         .submit-btn:disabled {
@@ -150,11 +155,11 @@
         }
 
         .success-message {
-            color: #4CAF50;
+            color: #1976d2;
             margin-top: 5px;
             font-size: 14px;
             padding: 10px;
-            background-color: #e8f5e9;
+            background-color: #e3f2fd;
             border-radius: 4px;
         }
 
@@ -171,7 +176,7 @@
             width: 20px;
             height: 20px;
             margin: -10px 0 0 -10px;
-            border: 2px solid #4CAF50;
+            border: 2px solid #1976d2;
             border-top-color: transparent;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;

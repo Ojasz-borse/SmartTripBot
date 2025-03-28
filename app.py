@@ -21,6 +21,7 @@ from sqlalchemy import Column, Integer, String, Date
 from datetime import datetime
 from translatepy import Translator
 from models import db, User, Trip, ChecklistItem, Document, Translation
+from werkzeug.security import generate_password_hash
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -857,6 +858,40 @@ def download_document(doc_id):
         flash(f'Error downloading document: {str(e)}', 'error')
     
     return redirect(url_for('dashboard1'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        if not username or not email or not password:
+            flash('All fields are required', 'error')
+            return redirect(url_for('register'))
+        
+        if User.query.filter_by(username=username).first():
+            flash('Username already exists', 'error')
+            return redirect(url_for('register'))
+            
+        if User.query.filter_by(email=email).first():
+            flash('Email already registered', 'error')
+            return redirect(url_for('register'))
+        
+        hashed_password = generate_password_hash(password)
+        new_user = User(username=username, email=email, password=hashed_password)
+        
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Registration successful! Please login.', 'success')
+            return redirect(url_for('login'))
+        except Exception as e:
+            db.session.rollback()
+            flash('An error occurred. Please try again.', 'error')
+            return redirect(url_for('register'))
+    
+    return render_template('register.html')
 
 if __name__ == '__main__':
     # app.run(host='0.0.0.0', port=8000, debug=False)
