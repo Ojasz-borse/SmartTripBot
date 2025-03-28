@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI Recommendations for Your Trip</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+    /* General Styles */
+body {
+    background: url('/static/aibag.jpg') no-repeat center center/cover;
+    font-family: 'Roboto', sans-serif;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;  /* Ensures content is always visible */
+    padding: 20px;
+    overflow: hidden;
+}
+
+.container {
+    background-color: rgba(0, 0, 0, 0.5); /* Slightly lighter for contrast */
+    padding: 30px;
+    border-radius: 12px;
+    width: 85%;
+    max-width: 700px;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Headings */
+h1 {
+    text-align: center;
+    font-size: 2rem; /* Adjusted for better visibility */
+    margin-bottom: 15px;
+    animation: slideIn 0.8s ease-in-out;
+}
+
+/* Form Styles */
+.form-group label {
+    font-weight: 500;
+}
+
+.form-control {
+    border-radius: 6px;
+    margin-bottom: 12px;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+/* Button */
+.btn-primary {
+    width: 100%;
+    border-radius: 6px;
+    padding: 12px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0056b3, #003f7f);
+    transform: scale(1.02);
+}
+
+/* Error Message */
+.alert-danger {
+    margin-top: 15px;
+    animation: fadeInAlert 1s ease-in-out;
+}
+
+/* Recommendations Section */
+.recommendations {
+    margin-top: 20px;
+    animation: fadeInRecommendations 1.5s ease-in-out;
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    border-left: 5px solid #007bff;
+}
+
+.recommendations h3 {
+    font-size: 1.4rem;
+    text-align: center;
+    color: #ffdf6c;
+}
+
+.recommendations ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.recommendations li {
+    margin: 5px 0;
+    font-size: 1rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes slideIn {
+    0% { transform: translateY(-50px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeInAlert {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes fadeInRecommendations {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* 🔹 Ensuring Full Content is Visible at 100% Zoom 🔹 */
+@media (max-height: 700px) {
+    body {
+        align-items: flex-start; /* Prevents content from being cut off */
+        padding-top: 20px;
+    }
+    
+    .container {
+        padding: 25px;
+        max-height: 95vh; /* Ensures content fits */
+        overflow-y: auto;
+    }
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .btn-primary {
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    .recommendations {
+        max-height: 220px;
+    }
+}
+.top-right-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #4b9fe1;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.top-right-button:hover {
+    background: #3778c2;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SMART PACKING AI</h1>
+        <button class="top-right-button" onclick="window.location.href='/dashboard'">Dashboard</button>
+
+        <form action="{{ url_for('ai') }}" method="POST">
+            <div class="form-group">
+                <label for="destination">Destination:</label>
+                <input type="text" class="form-control" id="destination" name="destination" required>
+            </div>
+            <div class="form-group">
+                <label for="days">Number of Days:</label>
+                <input type="number" class="form-control" id="days" name="days" required>
+            </div>
+            <div class="form-group">
+                <label for="start-date">Start Date:</label>
+                <input type="date" class="form-control" id="start-date" name="start-date" required>
+            </div>
+            <!-- Age Input -->
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" class="form-control" id="age" name="age" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Get Recommendations</button>
+        </form>
+
+        {% if error %}
+            <div class="alert alert-danger mt-3">
+                <strong>Error:</strong> {{ error }}
+            </div>
+        {% endif %}
+
+        {% if ai_response %}
+            <div class="recommendations mt-4">
+                <h3>Recommendations</h3>
+                <ul>
+                    <li><strong></strong> 
+                        <ul>
+                            {% for item in ai_response.clothing %}
+                                <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li><strong>Accessories:</strong> 
+                        <ul>
+                            {% for item in ai_response.accessories %}
+                                <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li><strong></strong>
+                        <ul>
+                            {% for item in ai_response.food %}
+                                <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
+
+        {% if age %}
+            <div class="mt-3">
+                <strong>Age:</strong> {{ age }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

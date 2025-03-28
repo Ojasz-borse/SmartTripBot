@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Currency Converter</title>
+    <link rel="stylesheet" href="../static/correncycon.css">
+</head>
+<style>
+    * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+ /* Sidebar */
+ .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 80px; /* Collapsed */
+            background: linear-gradient(180deg, #4B9FE1, #7ED5EA);
+            border-top-right-radius: 40px;
+            border-bottom-right-radius: 40px;
+            padding: 15px 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: width 0.4s ease-in-out;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        .sidebar:hover {
+            width: 240px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+            padding-left: 8px;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .logo h1 {
+            font-size: 14px;
+            color: white;
+            white-space: nowrap;
+            visibility: hidden;
+            transition: visibility 0.3s ease-in-out;
+        }
+
+        .sidebar:hover .logo h1 {
+            visibility: visible;
+        }
+
+        .nav-links {
+            width: 100%;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 25px;
+            font-size: 12px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            width: 100%;
+            padding-left: 8px;
+        }
+
+        .nav-links a i {
+            font-size: 18px;
+            width: 25px;
+            text-align: center;
+        }
+
+        .nav-links p {
+            font-size: 12px;
+            white-space: nowrap;
+            visibility: hidden;
+            transition: visibility 0.3s ease-in-out;
+        }
+
+        .sidebar:hover .nav-links p {
+            visibility: visible;
+        }
+
+        .logout {
+            margin-top: auto;
+            padding-bottom: 10px;
+        }
+
+        .logout a {
+            color: white;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            padding-left: 8px;
+            transition: 0.3s;
+        }
+
+        .logout a p {
+            visibility: hidden;
+        }
+
+        .sidebar:hover .logout a p {
+            visibility: visible;
+        }
+</style>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="/static/logo.png" alt="Logo">
+            <h1>Smart-Travel Bot</h1>
+        </div>
+        <nav class="nav-links">
+            <a href="/index"><i class="fas fa-home"></i><p>Home</p></a>
+            <a href="/trips"><i class="fas fa-plane"></i><p>My Trips</p></a>
+            <a href="/budget"><i class="fas fa-wallet"></i><p>Budget AI</p></a>
+            <a href="/check"><i class="fas fa-check-circle"></i><p>Checklist</p></a>
+            <a href="/upload"><i class="fas fa-file-upload"></i><p>Document Organizer</p></a>
+            <a href="/currencycon"><i class="fas fa-coins"></i><p>Currency Converter</p></a>
+            <a href="/emer"><i class="fas fa-ambulance"></i><p>Emergency Services</p></a>
+            <a href="/translate"><i class="fas fa-language"></i><p>Language & Translation</p></a>
+            <a href="#"><i class="fas fa-bell"></i><p>Smart Reminders</p></a>
+        </nav>
+        <div class="logout">
+            <a href="/logout"><i class="fas fa-sign-out-alt"></i><p>Logout</p></a>
+        </div>
+    </aside>
+    <div class="converter-container">
+        <h1>Currency Converter</h1>
+
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" placeholder="Enter amount" min="0">
+
+        <div class="currency-select">
+            <label for="from-currency">From Currency:</label>
+            <select id="from-currency" onchange="updateFlag('from-flag', this.value)">
+                <option value="USD">USD - US Dollar</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="INR">INR - Indian Rupee</option>
+                <option value="GBP">GBP - British Pound</option>
+                <option value="AUD">AUD - Australian Dollar</option>
+                <option value="JPY">JPY - Japanese Yen</option>
+                <option value="CAD">CAD - Canadian Dollar</option>
+            </select>
+            <img id="from-flag" src="../static/usd.png" alt="From Currency Flag" class="flag-icon">
+        </div>
+
+        <div class="currency-select">
+            <label for="to-currency">To Currency:</label>
+            <select id="to-currency" onchange="updateFlag('to-flag', this.value)">
+                <option value="USD">USD - US Dollar</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="INR">INR - Indian Rupee</option>
+                <option value="GBP">GBP - British Pound</option>
+                <option value="AUD">AUD - Australian Dollar</option>
+                <option value="JPY">JPY - Japanese Yen</option>
+                <option value="CAD">CAD - Cana
+                    dian Dollar</option>
+            </select>
+            <img id="to-flag" src="../static/aud.png" alt="To Currency Flag" class="flag-icon">
+        </div>
+
+        <button onclick="convertCurrency()">Convert</button>
+        <h2 id="result"></h2>
+    </div>
+    <iframe 
+    src="https://maps.google.com/maps?q=New+York&output=embed" 
+    width="500" 
+    height="250"
+    title="Location Map"
+    style="border:0;">
+
+</iframe>
+    <script src="../static/correncycon.js"></script>
+</body>
+</html>

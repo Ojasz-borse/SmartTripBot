@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login & Register</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #5F9EA0 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 380px;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #87CEEB, #5F9EA0);
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            color: #2c3e50;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative;
+            width: 100%;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            margin: 8px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="email"]:focus {
+            border-color: #87CEEB;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(135, 206, 235, 0.2);
+        }
+
+        .password-strength {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            color: #666;
+        }
+
+        .password-strength div {
+            width: 30%;
+            height: 5px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .strength-low {
+            background-color: #ff6b6b;
+        }
+
+        .strength-medium {
+            background-color: #ffd93d;
+        }
+
+        .strength-high {
+            background-color: #6bff6b;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, #87CEEB, #5F9EA0);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(135, 206, 235, 0.3);
+        }
+
+        .toggle-links {
+            margin-top: 20px;
+        }
+
+        .toggle-links a {
+            color: #87CEEB;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-links a:hover {
+            color: #5F9EA0;
+            text-decoration: underline;
+        }
+
+        /* Update icon positioning */
+        .form-group i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #87CEEB;
+            font-size: 1.1rem;
+            pointer-events: none;
+        }
+
+        /* Add placeholder styling */
+        input::placeholder {
+            color: #999;
+            font-size: 0.95rem;
+        }
+
+        /* Add specific styling for password input */
+        input[type="password"] {
+            letter-spacing: 0.1em;
+        }
+
+        /* Form group spacing */
+        .form-group + .form-group {
+            margin-top: 15px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .container {
+                width: 90%;
+                padding: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Container - Shown by default -->
+    <div class="container" id="login-container">
+        <h2>Login</h2>
+        <form id="login-form" action="/login" method="POST">
+            <input type="hidden" name="action" value="login">
+            <div class="form-group">
+                <input type="email" id="login-email" name="email" placeholder="Email" required>
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="form-group">
+                <input type="password" id="login-password" name="password" placeholder="Password" required>
+                <i class="fas fa-lock"></i>
+            </div>
+            <button type="submit">Login</button>
+            <div class="toggle-links">
+                <a href="#" id="show-register">Don't have an account? Register</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Register Container - Hidden by default -->
+    <div class="container" id="register-container" style="display: none;">
+        <h2>Register</h2>
+        <form id="register-form" action="/login" method="POST">
+            <input type="hidden" name="action" value="register">
+            <div class="form-group">
+                <input type="text" id="username" name="username" placeholder="Username" required>
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="form-group">
+                <input type="email" id="email" name="email" placeholder="Email" required>
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="form-group">
+                <input type="password" id="register-password" name="password" placeholder="Password" required>
+                <i class="fas fa-lock"></i>
+                <div class="password-strength">
+                    <div id="strength-low"></div>
+                    <div id="strength-medium"></div>
+                    <div id="strength-high"></div>
+                </div>
+            </div>
+            <button type="submit">Register</button>
+            <div class="toggle-links">
+                <a href="#" id="show-login">Already have an account? Login</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Ensure login container is shown by default
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('login-container').style.display = 'block';
+            document.getElementById('register-container').style.display = 'none';
+        });
+
+        // Toggle between login and register forms
+        document.getElementById('show-register').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('register-container').style.display = 'block';
+        });
+
+        document.getElementById('show-login').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('register-container').style.display = 'none';
+            document.getElementById('login-container').style.display = 'block';
+        });
+
+        // Password strength indicator
+        document.getElementById('register-password').addEventListener('input', function () {
+            const password = document.getElementById('register-password').value;
+            const low = document.getElementById('strength-low');
+            const medium = document.getElementById('strength-medium');
+            const high = document.getElementById('strength-high');
+
+            low.style.backgroundColor = '#e0e0e0';
+            medium.style.backgroundColor = '#e0e0e0';
+            high.style.backgroundColor = '#e0e0e0';
+
+            if (password.length >= 6 && /[A-Za-z]/.test(password) && /\d/.test(password)) {
+                high.style.backgroundColor = '#6bff6b';
+            } else if (password.length >= 6 && /[A-Za-z]/.test(password)) {
+                medium.style.backgroundColor = '#ffd93d';
+            } else {
+                low.style.backgroundColor = '#ff6b6b';
+            }
+        });
+    </script>
+</body>
+
+</html>

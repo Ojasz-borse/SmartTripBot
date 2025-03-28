@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Features - SmartTripBot</title>
+    <link rel="stylesheet" href="/static/mvp/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+</head>
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+:root {
+    --primary-color: #FF6B6B;
+    --secondary-color: #4ECDC4;
+    --accent-color: #FFE66D;
+    --dark-color: #2C3E50;
+    --light-color: #F7F7F7;
+    --gradient-1: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+    --gradient-2: linear-gradient(135deg, #4ECDC4, #45B7AF);
+    --gradient-3: linear-gradient(135deg, #FFE66D, #FFD93D);
+}
+
+body {
+    background: var(--gradient-1);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark-color);
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/static/pattern.png') repeat;
+    opacity: 0.1;
+    z-index: 0;
+}
+
+.container {
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    position: relative;
+    z-index: 1;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+}
+
+.logo {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.logo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-2);
+    opacity: 0.1;
+    z-index: 1;
+}
+
+.logo img {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    z-index: 2;
+}
+
+h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: var(--dark-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 100px;
+    height: 4px;
+    background: var(--gradient-3);
+    margin: 15px auto;
+    border-radius: 2px;
+}
+
+p {
+    font-size: 1.2em;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    color: var(--dark-color);
+    opacity: 0.9;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.feature {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.feature::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--gradient-2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.feature:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.feature:hover::before {
+    opacity: 1;
+}
+
+.feature i {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    background: var(--gradient-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: transform 0.3s ease;
+}
+
+.feature:hover i {
+    transform: scale(1.1);
+}
+
+.feature h3 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: var(--dark-color);
+}
+
+.feature p {
+    font-size: 1em;
+    margin-bottom: 0;
+    color: var(--dark-color);
+    opacity: 0.8;
+}
+
+.cta-section {
+    margin-top: 50px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 15px 40px;
+    background: var(--gradient-1);
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+    border: none;
+    cursor: pointer;
+}
+
+.cta-button.secondary {
+    background: var(--gradient-2);
+    box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.cta-button:active {
+    transform: translateY(-1px);
+}
+
+/* Features Page Styles */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.feature-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--gradient-2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card:hover::before {
+    opacity: 1;
+}
+
+.feature-card i {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    background: var(--gradient-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.feature-card h3 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: var(--dark-color);
+}
+
+.feature-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.feature-card ul li {
+    margin: 15px 0;
+    padding-left: 30px;
+    position: relative;
+    color: var(--dark-color);
+    opacity: 0.9;
+}
+
+.feature-card ul li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+        margin: 10px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-card {
+        padding: 20px;
+    }
+
+    .cta-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cta-button {
+        width: 100%;
+        max-width: 300px;
+    }
+} 
+</style>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="/static/logo.png" alt="SmartTripBot Logo">
+        </div>
+        <h1>Features</h1>
+        <p>Discover all the powerful features that make SmartTripBot your perfect travel companion.</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-suitcase-rolling"></i>
+                <h3>Smart Checklist</h3>
+                <ul>
+                    <li>AI-powered packing suggestions</li>
+                    <li>Customizable lists</li>
+                    <li>Real-time updates</li>
+                    <li>Print functionality</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-plane"></i>
+                <h3>Trip Management</h3>
+                <ul>
+                    <li>Create and edit trips</li>
+                    <li>Photo gallery for each trip</li>
+                    <li>Date tracking</li>
+                    <li>Detailed trip information</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-wallet"></i>
+                <h3>Budget Planning</h3>
+                <ul>
+                    <li>AI-powered budget recommendations</li>
+                    <li>Expense tracking</li>
+                    <li>Daily budget breakdown</li>
+                    <li>Smart savings tips</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-robot"></i>
+                <h3>AI Assistant</h3>
+                <ul>
+                    <li>Personalized recommendations</li>
+                    <li>Weather-based suggestions</li>
+                    <li>Cultural insights</li>
+                    <li>Local tips and tricks</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-language"></i>
+                <h3>Translation</h3>
+                <ul>
+                    <li>Multi-language support</li>
+                    <li>Real-time translation</li>
+                    <li>Common phrases</li>
+                    <li>Pronunciation guide</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-exchange-alt"></i>
+                <h3>Currency Converter</h3>
+                <ul>
+                    <li>Real-time exchange rates</li>
+                    <li>Multiple currency support</li>
+                    <li>Historical rates</li>
+                    <li>Offline mode</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <a href="/login" class="cta-button">Start Planning Your Trip</a>
+        </div>
+    </div>
+</body>
+</html> 
