@@ -50,9 +50,9 @@ co = cohere.Client(os.getenv('COHERE_API_KEY'))
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
-# Create database tables
-with app.app_context():
-    db.create_all()
+# Comment out automatic table creation since we're using Flask-Migrate
+# with app.app_context():
+#     db.create_all()
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
