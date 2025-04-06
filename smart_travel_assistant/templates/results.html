@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Itinerary & Packing List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Results for {{ destination }}</h1>
+    <h2>Weather</h2>
+    {% if weather %}
+        <p>Temperature: {{ weather['main']['temp'] }}&deg;C</p>
+        <p>Condition: {{ weather['weather'][0]['description'] }}</p>
+    {% else %}
+        <p>Weather data not available.</p>
+    {% endif %}
+    <h2>Suggested Activities</h2>
+    <ul>
+        {% for place in places %}
+            <li>{{ place['name'] }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
