@@ -30,7 +30,7 @@ app = Flask(__name__)
 
 # Configure the app
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-if app.config['SQLALCHEMY_DATABASE_URI'].startswith('postgres://'):
+if app.config['SQLALCHEMY_DATABASE_URI'] and app.config['SQLALCHEMY_DATABASE_URI'].startswith('postgres://'):
     app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI'].replace('postgres://', 'postgresql://', 1)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
@@ -38,7 +38,7 @@ app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 # Initialize extensions
-db.init_app(app)
+db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # Initialize other components
@@ -58,6 +58,14 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 # Routes
+@app.route('/')
+def index():
+    return jsonify({"message": "Smart Travel Assistant API is running!"})
+
+@app.route('/health')
+def health_check():
+    return jsonify({"status": "healthy"})
+
 @app.route('/dashboard1')
 def dashboard1():
     if 'user_id' not in session:
@@ -114,10 +122,6 @@ def dashboard():
     return render_template('dashboard.html', username=session.get('username'))
 
 @app.route('/index')
-def index():
-    return render_template('index.html')
-
-@app.route('/')
 def landing():
     return render_template('landing.html')
 
@@ -243,8 +247,6 @@ def delete_trip(trip_id):
     db.session.commit()
 
     return jsonify({'success': True, 'message': 'Trip deleted successfully'})
-
-
 
 @app.route('/currencycon')
 def currencycon():
@@ -501,7 +503,6 @@ def delete_document(doc_id):
         flash(f'Error deleting document: {str(e)}', 'error')
     
     return redirect(url_for('dashboard1'))
-
 
 @app.route('/logout')
 def logout():
