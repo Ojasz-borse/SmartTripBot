@@ -50,3 +50,6 @@ static/uploads/*
 client_secrets.json
 credentials.json
 *.sqbpro 
+
+client_secrets.json
+credentials.json
